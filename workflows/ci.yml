@@ -1,0 +1,29 @@
+name: Java CI Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    - name: Set up Java JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Compile Java Files
+      run: |
+        javac -cp "lib/*" Triangle.java TriangleService.java TriangleUnitTest.java TriangleIntegrationTest.java
+
+    - name: Run Unit and Integration Tests
+      run: |
+        java -cp "lib/*:." org.junit.runner.JUnitCore TriangleUnitTest TriangleIntegrationTest
